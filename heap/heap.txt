@@ -1,0 +1,92 @@
+#include <stdbool.h>
+#include <stdio.h>
+#include <limits.h>
+#include "heap.h"
+void bubbleUp( struct MinHeap *h, int i)
+{
+	int parent = (i - 1) / 2;
+	if (h->harr[parent] > h->harr[i])
+	{
+		int temp = h->harr[parent];
+		h->harr[parent] = h->harr[i];
+		h->harr[i] = temp;
+		bubbleUp(h, parent);
+	}
+}
+void bubbleDown( struct MinHeap *h, int i)
+{
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
+	int smallest = i;
+	// if there is no child
+	if (left >= h->size && right >= h->size)
+		return;
+	// if there is only left child
+	if (left < h->size && right >= h->size && h->harr[left] < h->harr[smallest])
+		smallest = left;
+	// no need to look for the case of only right child as it is a complete binary tree, no right child implies no left child implies no child
+	// this is given there are two children
+	if (left < h->size && h->harr[left] < h->harr[smallest])
+		smallest = left;
+	if (right < h->size && h->harr[right] < h->harr[smallest])
+		smallest = right;
+	if (smallest != i)
+	{
+		int temp = h->harr[smallest];
+		h->harr[smallest] = h->harr[i];
+		h->harr[i] = temp;
+		bubbleDown(h, smallest);
+	}
+}
+// add to the heap
+void insertKey( struct MinHeap *h, int k)
+{
+	if (h->size == h->capacity)
+	{
+		printf("\nOverflow: Could not insertKey\n");
+		return;
+	}
+	h->harr[h->size] = k;
+	bubbleUp(h, h->size);
+	h->size++;
+}
+// check if the heap is empty
+bool isEmpty( struct MinHeap *h)
+{
+	return h->size == 0;
+}
+// pop the minimum element
+int extractMin( struct MinHeap *h)
+{
+	if (h->size <= 0)
+		return INT_MAX;
+	if (h->size == 1)
+	{
+		h->size--;
+		return h->harr[0];
+	}
+	int root = h->harr[0];
+	h->harr[0] = h->harr[h->size - 1];
+	h->size--;
+	bubbleDown(h, 0);
+	return root;
+}
+
+// Driver program to test above functions
+int main8()
+{
+	struct MinHeap h;
+	h.size = 0;
+	h.capacity = 10000;
+	insertKey(&h, 3);
+	insertKey(&h, 20);
+	printf("%d ", extractMin(&h));
+	insertKey(&h, 15);
+	insertKey(&h, 5);
+	insertKey(&h, 4);
+	insertKey(&h, 2);
+	insertKey(&h, 45);
+	while (!isEmpty(&h))
+		printf("%d ", extractMin(&h));
+	return 0;
+}

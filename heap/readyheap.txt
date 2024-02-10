@@ -1,0 +1,114 @@
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <limits.h>
+#include "readyheap.h"
+int TIMER = 1;
+int get_timerHI(){
+	return 0;
+}
+int get_timerLO(){
+	return TIMER++;
+}
+uint8_t compare_state(struct state a, struct state b)
+{
+	if (a.priority < b.priority)
+		return 1;
+	else if (a.priority > b.priority)
+		return 2;
+	else
+	{
+		if (a.time < b.time)
+			return 1;
+		else if (a.time > b.time)
+			return 2;
+		else
+			return 0;
+	}
+}
+void swap_state(struct state *a, struct state *b)
+{
+	struct state temp;
+	temp.pid = a->pid;
+	temp.priority = a->priority;
+	temp.time = a->time;
+	// *a = *b;
+	a->pid = b->pid;
+	a->priority = b->priority;
+	a->time = b->time;
+	// *b = temp;
+	b->pid = temp.pid;
+	b->priority = temp.priority;
+	b->time = temp.time;
+}
+void _bubbleUp_state_heap( struct MinHeapState *h, int i)
+{
+	int parent = (i - 1) / 2;
+	if (1 == compare_state(h->harr[i], h->harr[parent]))
+	{
+		swap_state(&h->harr[i], &h->harr[parent]);
+		_bubbleUp_state_heap(h, parent);
+	}
+}
+void bubbleDown_state_heap( struct MinHeapState *h, int i)
+{
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
+	int smallest = i;
+	// if there is no child
+	if (left >= h->size && right >= h->size)
+		return;
+	// if there is only left child
+	if (left < h->size && right >= h->size && compare_state(h->harr[left], h->harr[smallest]) == 1)
+		smallest = left;
+	// no need to look for the case of only right child as it is a complete binary tree, no right child implies no left child implies no child
+	// this is given there are two children
+	if (left < h->size &&  compare_state(h->harr[left], h->harr[smallest]) == 1)
+		smallest = left;
+	if (right < h->size &&  compare_state(h->harr[right], h->harr[smallest]) == 1)
+		smallest = right;
+	if (smallest != i)
+	{
+		swap_state(&h->harr[i], &h->harr[smallest]);
+		bubbleDown_state_heap(h, smallest);
+	}
+}
+// add to the heap
+void insertKey_state_heap( struct MinHeapState *h, struct state k)
+{
+	k.time = get_timerHI();
+	k.time = k.time << 32;
+	k.time += get_timerLO();
+	if (h->size == h->capacity)
+	{
+		return;
+	}
+	h->harr[h->size] = k;
+	_bubbleUp_state_heap(h, h->size);
+	h->size++;
+}
+// check if the heap is empty
+uint8_t isEmpty_state_heap( struct MinHeapState *h)
+{
+	return h->size == 0;
+}
+// pop the minimum element
+struct state extractMin_state_heap( struct MinHeapState *h)
+{
+	if (h->size <= 0)
+		return (struct state){-1,-1};
+	if (h->size == 1)
+	{
+		h->size--;
+		return h->harr[0];
+	}
+	struct state root = h->harr[0];
+	h->harr[0] = h->harr[h->size - 1];
+	h->size--;
+	bubbleDown_state_heap(h, 0);
+	return root;
+}
+void printState(struct state s)
+{
+	printf("pid: %d, priority: %d, time: %d\n", s.pid, s.priority, s.time);
+}
