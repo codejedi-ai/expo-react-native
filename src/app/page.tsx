@@ -8,10 +8,10 @@ export default function Home() {
         <section className="hero-section h-screen flex items-center justify-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gradient">
-              STELLAR STUDIOS
+              Morning Wood
             </h1>
             <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-              Where imagination meets the silver screen. Creating unforgettable cinematic experiences.
+              Skibidi Dop Dop Dop Yes Yes, Skibidi Dop Dop Yee Yee
             </p>
             <div className="flex gap-4 justify-center">
               <button className="btn-primary">Our Projects</button>
