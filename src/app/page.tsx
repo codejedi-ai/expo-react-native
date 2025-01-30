@@ -2,9 +2,10 @@ import Navbar from '@/components/Navbar';
 import type { Film } from '@/types/film';
 
 async function getFeaturedFilms(): Promise<Film[]> {
-  const res = await fetch('http://localhost:3000/api/featured', {
-    next: { revalidate: 3600 } // Revalidate every hour
+  const res = await fetch(`/api/featured`, {
+    next: { revalidate: 3600 }
   });
+  
   
   if (!res.ok) {
     throw new Error('Failed to fetch featured films');

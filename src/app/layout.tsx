@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stellar Studios | Hollywood Film Production",
-  description: "Welcome to Stellar Studios - Where cinematic dreams come to life. We create unforgettable movie experiences that captivate audiences worldwide.",
+  title: "Morning Wood | Hollywood Film Production",
+  description: "Welcome to Morning Wood - Where cinematic dreams come to life. We create unforgettable movie experiences that captivate audiences worldwide.",
 };
 
 export default function RootLayout({

@@ -12,7 +12,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-gradient">
-              STELLAR STUDIOS
+              Morning Wood
             </Link>
           </div>
           
