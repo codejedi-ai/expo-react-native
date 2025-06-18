@@ -1,1 +1,0 @@
-# define ALPHABET_SIZE 26
